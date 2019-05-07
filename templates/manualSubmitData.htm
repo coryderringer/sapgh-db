@@ -1,0 +1,201 @@
+{% extends "_base.htm" %}
+
+{% block title %}
+	Enter Data
+{% endblock %}
+
+{% block bodycontent %}
+
+<body data-spy="scroll" data-target=".navbar" data-offset="120">
+
+	<!-- Navbar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<p class="navbar-text">Welcome!</p>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Qualify text -->
+	
+	<div id="contentDiv" style="display:none" class="container well">
+		<h1>Welcome to Sunday Assembly!</h1>
+		<h3>Please sign in here.</h3>
+		<p>Start typing your last name into the text field, then select the correct name when it appears.</p>
+
+		<div class = "row">
+			<div class = "col-xs-6">
+				<p>Enter Your Name:</p>
+				
+			
+				<input list="memberNames" name="memberName" style = "background-color: white">
+				<datalist id="memberNames"></datalist>
+				<button id="addName" class = "btn btn-primary">Sign In</button>
+				
+
+			</div>
+			<div id = 'listDiv' class = "col-xs-6">
+				<p>Members Present:</p>
+				<div class="list-group" id="list-tab" role="tablist">
+					
+					<!-- list gets populated here! -->
+				</div>
+			</div>
+
+		
+	</div>
+</body>
+
+<script>
+
+
+
+
+
+
+
+main = {
+	init: function(){
+		main.cache()
+		main.events()
+		main.fillDropdown()
+		main.render()
+	},
+
+	attendees: [],
+
+	// members: ['Kelsey Derringer', 'Henry McKay'],
+
+	members: {{memberNames|safe}}, // huh, that was easy
+
+	cache: function(){
+
+		main.$addName = $('#addName')
+		main.$nameInput = $('#nameInput')
+		main.$contentDiv = $('#contentDiv')
+		main.$list = $('#list-tab')
+	},
+
+	events: function(){
+		main.$addName.unbind().on('click', main.addName)
+		// main.$nameInput.unbind().on('input', function(){
+		// 	main.autocomplete(main.$nameInput.val())
+		// })
+
+		$('#memberNames').on('change', function(){
+			var opt = $('option[value="'+$(this).val()+'"]')
+			// alert(opt.length ? opt.attr('id') : 'NO OPTION');
+			alert($(this).val())
+
+		})
+
+	},
+
+	render: function(){
+
+		// main.$listDiv.append(main.populate(main.attendees))
+		main.$list.html('')
+		main.$list.append(main.populate(main.attendees))
+		main.$contentDiv.show()
+	},
+
+	populate: function(names){
+		// do this for ALL names, selectively make them visible
+		// create ul with lis for each name
+		
+					// <p class="list-group-item" data-toggle="list" role="tab" aria-label="Close">Kelsey Derringer
+			  //   		<button type="button" class="close" aria-label="Close">
+					// 		<span aria-hidden="true">&times;</span>
+					// 	</button>
+			  //   	</p>
+
+		let div = document.createElement('div')
+
+		for(var i = 0; i < names.length; i++){
+			
+			let p = document.createElement('p')
+			p.setAttribute('class', 'list-group-item')
+			p.setAttribute('data-toggle', 'list')
+			p.setAttribute('role', 'tab')
+			p.textContent = names[i]
+
+			let b = document.createElement('button')
+			b.setAttribute('class', 'close')
+			b.setAttribute('aria-label', 'Close')
+			var id = 'close'+String(i+1)
+			b.setAttribute('id', id)
+			b.innerHTML = '<span aria-hidden="true">&times;</span>'
+			b.setAttribute('onclick', 'main.deleteItem('+ id +')')
+
+			p.append(b)
+			div.append(p)
+
+		}
+
+
+		return div
+		
+	},
+
+	addName: function(){
+		newName = document.getElementsByName('memberName')[0].value
+
+		// console.log('new name: '+newName)
+		if(main.attendees.indexOf(newName) == -1){
+			main.attendees.push(newName)	
+		}
+
+		main.render()
+		main.events()
+	},
+
+	fillDropdown: function(){
+		for(var i = 0; i < main.members.length; i++){
+			
+			let o = document.createElement('option')
+			o.setAttribute('value', main.members[i])
+			o.setAttribute('id', main.members[i])
+			o.innerHTML = main.members[i]
+
+			$('#memberNames').append(o)
+		}
+	},
+
+	deleteItem: function(obj){
+		var p = obj.parentNode.textContent
+		p = p.slice(0, p.length - 1)
+		
+		// remove from list of attendees
+		var position = main.attendees.indexOf(p)
+		main.attendees.splice(position, 1)
+
+		// render
+		main.render()
+	}
+
+	
+
+}
+
+
+
+$(document).ready(function(){
+	// $('#password').focus();
+	// $('#password').keydown(function(e){
+	// 	if(e.keyCode == 13){
+	// 		$('#password').submit();
+	// 	}
+	// });
+	main.init()
+})
+
+// NEXT STEPS 5/6/19: 
+// delete names from list when they click the "x"
+// every time it changes, send an ajax call to the back end
+// Add event title and date
+
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "_base.htm" %}
+{% block title %}
+	Welcome!
+{% endblock%}
+
+{% block bodycontent %}
+
+<body data-spy="scroll" data-target=".navbar" data-offset="120">
+
+	<!-- Navbar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<p class="navbar-text">Welcome!</p>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Qualify text -->
+	<section id="note">
+		
+		<div id="contentDiv" style="display:none" class="container well">
+			<h1>Welcome!</h1>
+			<p>Please select an option:</p><br><br>
+			<div class = "row">
+				<div class = "col-xs-4 text-center">
+					<button id="bulkButton" class = 'btn btn-primary'>Bulk Submission</button>
+					<br><br>
+					<p>Choose this option to add all attendees at once.</p>
+				</div>
+				<div class = "col-xs-4 text-center">
+					<button id="manualButton" class = 'btn btn-primary'>Manual Submission</button>
+					<br><br>
+					<p>Choose this option to add one attendee at a time.</p>
+				</div>
+				<div class = "col-xs-4 text-center">
+					<button id="queryButton" class = 'btn btn-primary'>Data Query</button>
+					<br><br>
+					<p>Choose this option to view attendance data from previous events.</p>
+				</div>
+				
+			</div>
+			<form id="bulkForm" method="get" action="/bulkData" class="form-inline"></form>
+			<form id="manualForm" method="get" action="/manualData" class="form-inline"></form>
+				<!-- <div class="form-group">
+					<input type="submit" value="Begin the study" class="btn btn-primary"/>
+				</div> -->
+			<form id="queryForm" method="get" action="/queryData" class="form-inline"></form>
+
+		</div>
+
+	</section>
+
+</body>
+
+<script>
+
+
+menu = {
+	init: function(){
+		menu.cache()
+		menu.events()
+		menu.render()
+
+	
+	}, 
+
+	cache: function(){
+		$bulkButton = $('#bulkButton')
+		$manualButton = $('#manualButton')
+		$queryButton = $('#queryButton')
+
+		$bulkForm = $('#bulkForm')
+		$manualForm = $('#manualForm')
+		$queryForm = $('#queryForm')
+		$contentDiv = $('#contentDiv')
+	},
+
+	events: function(){
+		$bulkButton.unbind().on('click', function(){
+			$bulkForm.submit()
+		})
+		
+		$manualButton.unbind().on('click', function(){
+			$manualForm.submit()
+		})
+
+		$queryButton.unbind().on('click', function(){
+			alert('query')
+		})
+	},
+
+	render: function(){
+		$contentDiv.show()
+			
+	}
+}
+
+$(document).ready(function(){
+
+
+	
+	menu.init()
+
+});
+
+</script>
+
+
+
+{% endblock %}

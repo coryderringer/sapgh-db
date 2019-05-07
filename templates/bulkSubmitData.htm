@@ -1,0 +1,58 @@
+{% extends "_base.htm" %}
+
+{% block title %}
+	Submit Data
+{% endblock %}
+
+{% block bodycontent %}
+
+<body data-spy="scroll" data-target=".navbar" data-offset="120">
+
+	<!-- Navbar -->
+	<nav class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container-fluid">
+			<div class="navbar-header">
+				<p class="navbar-text">Welcome!</p>
+			</div>
+		</div>
+	</nav>
+
+	<!-- Qualify text -->
+	
+	<div id="contentDiv" style="display:none" class="container well">
+
+		<p>Use the file upload tool to submit attendance data. Data must be in .csv format, with one row per person in attendance and each of the following columns:
+			<ul>
+				<li>Event Name</li>
+				<li>Event Date</li>
+				<li>First Name</li>
+				<li>Last Name</li>
+			</ul>
+		</p>
+		<form method="post" action="/data">
+			<select id="whichPage" name="whichPage">		
+				<option value="user">User</option>
+				<option value="scenario">Scenario</option>
+				<option value="memoryTest">Final Judgment Data</option>
+			</select>
+			<input type="password" id="password" name="password">
+			<input type="submit" name="Submit">
+		</form>
+	</div>
+</body>
+
+<script>
+
+$(document).ready(function(){
+	// $('#password').focus();
+	// $('#password').keydown(function(e){
+	// 	if(e.keyCode == 13){
+	// 		$('#password').submit();
+	// 	}
+	// });
+	$('#contentDiv').show()
+})
+
+</script>
+
+{% endblock %}
